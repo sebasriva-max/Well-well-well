@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bella — Friday</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f3;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #invite-wrap {
+      max-width: 420px;
+      width: 90%;
+      padding: 2rem 2rem 2.5rem;
+      background: #ffffff;
+      border: 0.5px solid rgba(0,0,0,0.12);
+      border-radius: 12px;
+      min-height: 260px;
+      position: relative;
+    }
+    .page { transition: opacity 0.35s ease; }
+    .page.hidden { opacity: 0; pointer-events: none; position: absolute; top: 2rem; left: 2rem; right: 2rem; }
+    .page.visible { opacity: 1; }
+    .line { font-size: 15px; color: #1a1a1a; line-height: 1.75; margin-bottom: 0.3rem; }
+    .line.muted { color: #6b6b6b; font-size: 14px; }
+    .line.bold { font-weight: 500; }
+    .spacer { height: 1rem; }
+    .forecast-badge {
+      display: inline-block;
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: #f1efea;
+      color: #6b6b6b;
+      border: 0.5px solid rgba(0,0,0,0.1);
+      margin-top: 0.4rem;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 1.8rem;
+      align-items: center;
+    }
+    .btn {
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      border: none;
+      transition: opacity 0.15s, transform 0.1s;
+      color: #ffffff;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-ja { background-color: #16a34a; }
+    .btn-ja:hover { background-color: #15803d; }
+    .btn-nee { background-color: #dc2626; }
+    .btn-nee:hover { background-color: #b91c1c; }
+    .page2-content { text-align: center; padding: 1rem 0 0.5rem; }
+    .page2-content .big { font-size: 22px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.5rem; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .page2-content { animation: fadeUp 0.5s ease forwards; }
+  </style>
+</head>
+<body>
+  <div id="invite-wrap">
+    <div class="page visible" id="page1">
+      <div class="line bold">Okay Bella, you aren't getting away that easy…</div>
+      <div class="line muted">I didn't forget about our agreement</div>
+      <div class="spacer"></div>
+      <div class="line muted">A bit of a strange vibe after what happened but I think I understand where that came from</div>
+      <div class="spacer"></div>
+      <div class="line">As proposed a while ago, drinks on Friday, on me.</div>
+      <div style="margin-top: 0.4rem;">
+        <span class="forecast-badge">Night forecast: incredibly funny and perhaps somewhat chaotic</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ja" id="btn-ja" onclick="handleJa()">Ja, ofc</button>
+        <button class="btn btn-nee" id="btn-nee" onmouseenter="dodgeNee(event)" ontouchstart="dodgeNee(event)">Nee</button>
+      </div>
+    </div>
+
+    <div class="page hidden" id="page2">
+      <div class="page2-content">
+        <div class="big">Mooi, nu wel 🙌</div>
+        <div class="line muted" style="text-align:center; margin-top: 0.4rem;">I'll pick up from yours at 21:00 👀</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleJa() {
+      var p1 = document.getElementById('page1');
+      var p2 = document.getElementById('page2');
+      p1.classList.remove('visible');
+      p1.classList.add('hidden');
+      setTimeout(function() {
+        p1.style.display = 'none';
+        p2.classList.remove('hidden');
+        p2.classList.add('visible');
+      }, 350);
+    }
+
+    var dodgeCount = 0;
+    function dodgeNee(e) {
+      e.preventDefault();
+      dodgeCount++;
+      var btn = document.getElementById('btn-nee');
+      var wrap = document.getElementById('invite-wrap');
+      var wrapRect = wrap.getBoundingClientRect();
+      var btnW = btn.offsetWidth;
+      var maxX = wrapRect.width - btnW - 32;
+      var randX = Math.floor(Math.random() * maxX);
+      btn.style.position = 'absolute';
+      btn.style.left = randX + 'px';
+      btn.style.top = (Math.random() < 0.5 ? '160px' : '200px');
+      if (dodgeCount > 4) {
+        btn.style.opacity = '0.35';
+        btn.style.fontSize = '11px';
+      }
+    }
+  </script>
+</body>
+</html>
